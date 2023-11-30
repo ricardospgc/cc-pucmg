@@ -1,4 +1,20 @@
-class Arvore {
+class No{
+	public int elemento;
+	public No esq, dir;
+
+	public No(int elemento){
+		this(elemento, null, null);
+	}
+
+	public No(int elemento, No esq, No dir) {
+		this.elemento = elemento;
+		this.esq = esq;
+		this.dir = dir;
+	}
+}// fim class No
+
+
+public class Arvore {
 	private No raiz;
 
 	/* Construtor */
@@ -14,31 +30,33 @@ class Arvore {
 	 * @param int chave - elemento a ser pesquisado
 	 * @return boolean com o resultado da pesquisa;
 	 */
-	public boolean pesquisar(int chave) {
-		return pesquisar(chave, raiz);
+	public void pesquisar(int chave) {
+		boolean resp = pesquisar(chave, raiz);
+		MyIO.println((resp == true)? "P: SIM" : "P: NAO");
 	} // fim pesquisar()
 
 	/**
 	 * Metodo privado de pesquisa, recursivo
 	 * 
 	 * @param int chave - elemento a ser pesquisado
-	 * @param No  raiz - raiz da Arvore
+	 * @param No  i - no atual em analise
 	 * @return boolean com o resultado da pesquisa
 	 */
-	public boolean pesquisar(int chave, No raiz) {
-		boolean resp = false;
+	public boolean pesquisar(int chave, No i) {
+		boolean resp;
 
-		if (raiz == null)
+		if (i == null)
 			resp = false;
 
-		else if (chave == raiz.elemento)
+		else if (chave == i.elemento)
 			resp = true;
 
-		else if (chave < raiz.elemento)
-			pesquisar(chave, raiz.esq);
-
-		else
-			pesquisar(chave, raiz.dir);
+		else if (chave < i.elemento){
+			resp = pesquisar(chave, i.esq);
+		}
+		else {
+			resp = pesquisar(chave, i.dir);
+		}
 
 		return resp;
 	} // fim pesquisar()
@@ -265,12 +283,20 @@ class Arvore {
 
 	public static void main(String[] args) throws Exception{
 		Arvore arvoreBinaria = new Arvore();
-        for(int i = 0; i < 15; i++){
+        for(int i = 0; i < 10; i++){
 			int j = MyIO.readInt();
             arvoreBinaria.inserir(j);
         }
 		
 		arvoreBinaria.caminharCentral();
-		System.out.print("\t Altura: " + arvoreBinaria.getAltura());
+		System.out.println("\t Altura: " + arvoreBinaria.getAltura());
+
+		int chave;
+		do{
+			MyIO.print("Pesquisa: ");
+			chave = MyIO.readInt();
+			if(chave != -999) arvoreBinaria.pesquisar(chave);
+		} while (chave != -999);
+
 	}// fim main()
 }
