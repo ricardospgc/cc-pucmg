@@ -345,6 +345,8 @@ public class Jogador {
 
         tabela.adicionaJogadores();
         tabela.pesquisa();
+
+        tabela.criaLog();
     }// fim main
 
 }// fim classe Jogador
