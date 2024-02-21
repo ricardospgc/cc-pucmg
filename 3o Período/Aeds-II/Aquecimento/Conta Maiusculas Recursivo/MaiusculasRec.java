@@ -1,4 +1,4 @@
-class Maiusculas{
+class MaiusculasRec{
 
     /*
     * Metodo publico para avaliar se e' fim do input
