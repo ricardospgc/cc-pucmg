@@ -36,8 +36,8 @@ public class Palindromo{
 
         while (!ehFim(input)) {
             boolean resp = ehPalindromo(input);
-            if(resp) MyIO.println("SIM");
-            else MyIO.println("NAO");
+            if(resp) System.out.println("SIM");
+            else System.out.println("NAO");
 
             input = scanner.nextLine();
         } 
