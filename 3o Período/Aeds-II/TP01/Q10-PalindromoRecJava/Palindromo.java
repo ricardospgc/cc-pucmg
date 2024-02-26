@@ -32,12 +32,14 @@ public class Palindromo{
         boolean resp = true;
 
         if(i < str.length()/2 && resp == true){
-            if(str.charAt(i) != str.charAt(str.length() - i - 1)) resp = false;
-            else ehPalindromo(str, i++);
+            if(str.charAt(i) != str.charAt(str.length() - i - 1)) 
+                resp = false;
+            else 
+                ehPalindromo(str, i++);
         }
         
         return resp;
-    }
+    }// fim ehPalindromo
 
     public static void main(String[] args){
         String input = MyIO.readLine();
