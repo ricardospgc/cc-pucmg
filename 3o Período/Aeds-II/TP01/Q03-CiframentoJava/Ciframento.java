@@ -1,4 +1,3 @@
-import java.util.Scanner;
 
 public class Ciframento{
     public static int chave = 3;
@@ -32,16 +31,15 @@ public class Ciframento{
         return resp.toString();
     }// fim cifraCesar
 
-    public static void main(String[] args){
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
+    public static void main(String[] args)  {
+
+        String input = MyIO.readLine();
 
         while (!ehFim(input)) {
-            System.out.println(cifraCesar(input));
+            MyIO.println(cifraCesar(input));
 
-            input = scanner.nextLine();
+            input = MyIO.readLine();
         } 
 
-        scanner.close();
-    }// fim main()
+    }// fim main()  
 }
