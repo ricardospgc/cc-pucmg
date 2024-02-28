@@ -14,6 +14,12 @@ public class Alteracao{
         return resp;
     }// fim ehFim
     
+    /**
+     * Metodo que altera uma letra aleatoria do input por outra
+     * @param input string original
+     * @param gerador gerador aleatório com a seed para correção
+     * @return string alterada
+     */
     static public String alteracao(String input, Random gerador){
         
         char char1 = (char)('a' + (Math.abs(gerador.nextInt()) % 26));
