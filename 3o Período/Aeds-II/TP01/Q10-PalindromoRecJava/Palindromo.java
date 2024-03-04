@@ -35,7 +35,7 @@ public class Palindromo{
             if(str.charAt(i) != str.charAt(str.length() - i - 1)) 
                 resp = false;
             else 
-                ehPalindromo(str, i++);
+                ehPalindromo(str, ++i);
         }
         
         return resp;
