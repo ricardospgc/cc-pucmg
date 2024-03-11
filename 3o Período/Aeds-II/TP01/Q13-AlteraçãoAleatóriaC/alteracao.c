@@ -34,6 +34,7 @@ char* alteracao(char input[MAXTAM]) {
 char* alteracaoRec(char input[MAXTAM], char char1, char char2, int index){
     if(index < strlen(input)){
         if(input[index] == char1) input[index] = char2;
+        
         alteracaoRec(input, char1, char2, index + 1);
     }
     return input;
