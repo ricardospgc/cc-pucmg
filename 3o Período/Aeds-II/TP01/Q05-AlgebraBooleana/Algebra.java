@@ -125,24 +125,15 @@ class Algebra{
      * @return boolean resultado
      */
     public static String and(String input, int pos){
-        String resp = "";
+        String resp = "1";
 
-        switch(input.substring(pos+1, pos+6)){
-            case "0 , 0":
+        //De pos até encontrar ')'
+        //Se achar 0, termina, retorna falso
+        for(int i = pos; i < input.length() && input.charAt(i) != ')'; i++){
+            if(input.charAt(i) == '0'){
                 resp = "0";
-                break;
-            case "0 , 1":
-                resp = "0";
-                break;
-            case "1 , 0":
-                resp = "0";
-                break;
-            case "1 , 1":
-                resp = "1";
-                break;
-            default:
-                MyIO.println("ERRO AND!");
-                break;
+                i = input.length();
+            }
         }
 
         return resp;
@@ -155,24 +146,15 @@ class Algebra{
      * @return boolean resultado
      */
     public static String or(String input, int pos){
-        String resp = "";
+        String resp = "0";
 
-        switch(input.substring(pos+1, pos+6)){
-            case "0 , 0":
-                resp = "0";
-                break;
-            case "0 , 1":
+        //De pos até encontrar ')'
+        //Se achar 0, termina, retorna falso
+        for(int i = pos; i < input.length() && input.charAt(i) != ')'; i++){
+            if(input.charAt(i) == '1'){
                 resp = "1";
-                break;
-            case "1 , 0":
-                resp = "1";
-                break;
-            case "1 , 1":
-                resp = "1";
-                break;
-            default:
-                MyIO.println("ERRO OR!");
-                break;
+                i = input.length();
+            }
         }
 
         return resp;
@@ -185,42 +167,23 @@ class Algebra{
      * @return boolean resultado
      */
     public static String not(String input, int pos){
-        String resp = "";
 
-        switch(input.charAt(pos+1)){
-            case '0':
-                resp = "1";
-                break;
-            case '1':
-                resp = "0";
-                break;
-            default:
-                MyIO.println("ERRO NOT!");
-                break;
-        }
+        return (input.charAt(pos+1) == '0') ? "1" : "0";
 
-        return resp;
     }//fim not()
 
     public static void main(String[] args){
 
-        String input = new String ("2 1 1 and(not(A) , not(B))");
+        String input = new String ("3 1 0 1 or(and(A , B , C) , and(A , not(B) , C) , and(not(A) , not(B) , C) , and(not(A) , not(B) , not(C)))");
         
         atribuiBoolean(input);
         input = preparaInput(input);
-        MyIO.println("Input preparado: " + input);
-
-        input = resolve(input);
-
-        input = resolve(input);
-
-        input = resolve(input);
-        MyIO.println("Resolvido: " + input);
+        MyIO.println(input);
      
-        /*while(input.length() > 1){ 
+        while(input.length() > 1){ 
             input = resolve(input);
             MyIO.println(input);
-        } */
+        }
     
     }// fim main
 }
