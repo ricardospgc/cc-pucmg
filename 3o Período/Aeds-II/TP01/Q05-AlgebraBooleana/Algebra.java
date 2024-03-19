@@ -2,6 +2,15 @@ class Algebra{
     static char charA, charB, charC;
 
     /**
+    * Metodo para avaliar se o input = "FIM"
+    * @param input string contendo input do usuario
+    * @return booleano se e' fim ou nao
+    */
+    static public boolean isFim(String input){
+        return input.charAt(0) == '0' && input.length() == 1;
+    }// fim ehFim
+
+    /**
      * Atribui 'as variaveis globais os seus valores booleanos (1 ou 0)
      * @param input
      */
@@ -20,6 +29,7 @@ class Algebra{
      * @return String pronta para resolucao
      */
     public static String preparaInput(String input){
+        input = input.trim();
         StringBuilder resp = new StringBuilder();
         
         // troca as variaveis pelos seus valores
@@ -172,17 +182,22 @@ class Algebra{
 
     }//fim not()
 
-    public static void main(String[] args){
-
-        String input = new String ("3 1 0 1 or(and(A , B , C) , and(A , not(B) , C) , and(not(A) , not(B) , C) , and(not(A) , not(B) , not(C)))");
-        
+    public static String algebra(String input){
         atribuiBoolean(input);
         input = preparaInput(input);
-        MyIO.println(input);
-     
         while(input.length() > 1){ 
             input = resolve(input);
-            MyIO.println(input);
+        }
+        return input;
+    }
+
+    public static void main(String[] args){
+        String input = MyIO.readLine();
+        
+        while(!isFim(input)){
+            String resp = algebra(input);
+            MyIO.println(resp);
+            input = MyIO.readLine();
         }
     
     }// fim main
