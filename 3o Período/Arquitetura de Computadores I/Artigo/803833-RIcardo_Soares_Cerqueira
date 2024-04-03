@@ -1,0 +1,74 @@
+Ricardo Soares Cerqueira
+803833
+
+1) Artigo: B-DIRO: Um Robô para uso didático com Dispositivos Lógicos
+Programáveis e VHDL
+
+2) Title: 	B-diro: um robô para uso didático com dispositivos lógicos programáveis e VHDL
+
+   Authors: 	GRELLET, Alex Bertoloti do Carmo
+		SANTOS, João Vitor Comoti Pires dos
+		SILVA, Nicolas Kevin Fagundes
+
+   Advisor: 	JANDL JUNIOR, Peter
+
+   type of document: 	Monografia
+
+   Keywords: 	Robôs;Vhdl;Sensores
+
+   Issue Date: 	6-Dec-2023
+
+   Publisher: 	114
+
+   Citation: 	GRELLET, Alex. SANTOS, João; SILVA, Nicolas. B-DIRO: projeto de um robô para uso didático com dispositivos lógicos programáveis e VHDL. 2023. (Curso Superior de Tecnologia em Sistemas Embarcados) Faculdade de Tecnologia Deputado Ary Fossen, Jundiaí, 2023
+
+3) a) ASIC: Sigla para Application-Specific Integrated Circuit. É um tipo de circuito integrado criado para um uso específico, diferente de ter um propósito geral, como as CPUs e GPUs. Por isso, ASICs executam tarefas muito específicas de maneira muito eficiente, normalmente superando os circutios de propósito geral.
+
+   b) ASSP: Sigla para Application-Specific Standard Product. É um circuito montado para uma aplicação específica, mas é diferente das ASIC ao não serem completamente focadas em uma única função: são usados em diversas aplicações, mas em um escopo pequeno.
+
+   c) SPLD: Sigla para Simple Programmable Logic Device. É um tipo de Dispositivo Lógico Programável, com intuito de implementar funções lógicas digitais simples, geralmente usados em aplicações de pequena escala, que necessitem opções flexíveis e customizáveis.
+
+   d) CPLD: Complex Programmable Logic Device. São chips complexos utilizados em aplicações que precisem de alta flexibilidade, velocidade e customização, geralmente em projetos de maior escala.
+
+   e) FPGA: Field-Programmable Gate Array. São os circuitos mais complexos dentre os citados, que podem ser configurados por usuários depois de sua fabricação, através de blocos lógicos programáveis e conexões configuráveis.
+
+4)
+ _____________________________________________________________________________________________________________________________________________
+|Característica       | PROM (Programmable Read-Only Memory)  |	PLA (Programmable Logic Array)        |  PAL (Programmable Array Logic)       |
+|_____________________|_______________________________________|_______________________________________|_______________________________________|
+|Tipo de Dispositivo  |	Memória Programável                   |	Matriz de Lógica Programável          | Array de Lógica Programável           |  
+|_____________________|_______________________________________|_______________________________________|_______________________________________|
+|Funcionalidade	      |Armazena dados permanentes programados |Implementa funções lógicas programáveis|Implementa funções lógicas programáveis|
+|                     |pelo usuário	                      |pelo usuário pelo usuário              |pelo usuário                           |
+|_____________________|_______________________________________|_______________________________________|_______________________________________|
+|Programação	      |Uma vez programável	              |Reconfigurável após a fabricação	      | Reconfigurável após a fabricação      |
+|_____________________|_______________________________________|_______________________________________|_______________________________________|
+|Flexibilidade	      | Baixa                                 |	Alta                                  |	Média                                 |
+|_____________________|_______________________________________|_______________________________________|_______________________________________|
+|Utilização Comum     |Armazenamento de tabelas de busca      | Implementação de circuitos lógicos    |Implementação de circuitos lógicos     |
+|                     |ou código de inicialização             | complexos                             |em aplicações de média complexidade    |
+|_____________________|_______________________________________|_______________________________________|_______________________________________|
+
+5)
+_____________________________________________________________________________________________________________
+|Característica	          | CPLD (Complex Programmable Logic Device) |	FPGA (Field-Programmable Gate Array) |
+|_________________________|__________________________________________|_______________________________________|
+|Arquitetura              |Estrutura de bloco com várias entradas    |Matriz de portas e blocos de           |
+|                         |e saídas configuráveis                    |interconexão configuráveis             |
+|_________________________|__________________________________________|_______________________________________| 
+|Complexidade	          | Menor                                    |	Maior                                |
+|_________________________|__________________________________________|_______________________________________|
+|Capacidade de Lógica	  | Menor                                    |	Maior                                |
+|_________________________|__________________________________________|_______________________________________|
+|Integração	          |Integra menos recursos em um único chip   |Pode integrar uma variedade de         |
+|                         |                                          |recursos em um único chip              |
+|_________________________|__________________________________________|_______________________________________|
+|Tempo de Desenvolvimento |	Mais rápido	                     | Mais lento                            |
+|_________________________|__________________________________________|_______________________________________|
+|Consumo de Energia       |	Geralmente menor	             | Geralmente maior                      |
+|_________________________|__________________________________________|_______________________________________|
+|Custo                    |	Geralmente mais baixo	             | Geralmente mais alto                  |
+|_________________________|__________________________________________|_______________________________________|
+
+
+
