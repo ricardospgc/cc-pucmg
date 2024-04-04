@@ -228,17 +228,17 @@ public class Registro {
      * @return a string do personagem
      */
     public static String searchId(String id, BufferedReader buffer) {
-        String line = "";
+        String csvLine = "";
         Boolean hasFoundId = false;
         try{
-            while((hasFoundId == false) && ((line = buffer.readLine()) != null)){
-                String idAtual = line.substring(0, line.indexOf(",")); // Atribui a string ate a primeira virgula
+            while((hasFoundId == false) && ((csvLine = buffer.readLine()) != null)){
+                String idAtual = csvLine.substring(0, csvLine.indexOf(",")); // Atribui a string ate a primeira virgula
 
                 if(id.equals(idAtual))
                     hasFoundId = true;
             }
         } catch (Exception e) {MyIO.println(e.getMessage());}
-        return line;
+        return csvLine;
     }// searchId()
 
     /**
