@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*; 
 import java.time.*;
 
-public class Character{
+class Character{
     private String id;
     private String name;
     private ArrayList<String> alternate_names;
@@ -21,8 +21,6 @@ public class Character{
     private String gender;
     private String hairColor;
     private Boolean wizard;
-
-    public static Integer numOfCharacters = 0;
 
 
     /*** CONSTRUTORES ***/
@@ -47,9 +45,7 @@ public class Character{
         this.eyeColor = null;
         this.gender = null;
         this.hairColor = null;
-        //Boolean wizard;
-
-        numOfCharacters++;
+        //Boolean wizard;        
     }
 
     /**
@@ -57,7 +53,6 @@ public class Character{
     */
     Character(String info){
         setCharacter(info);
-        numOfCharacters++;
     }
 
     /*** SETS & GETS ***/
@@ -137,19 +132,67 @@ public class Character{
     public Boolean getWizard(){ return this.wizard; }
 
     /**
-     * Separa a string e atribui ao jogador os valores
+     * separa a string info em um array
+     * @param strInfo string com todas as informacoes
+     * @return array com as informacoes separadas
+     */
+    private String[] splitInfo(String strInfo){
+        String[] arrInfos = new String[18];
+
+        
+
+        return arrInfos;
+    }
+
+    /**
+     * atribui os atributos ao personagem
      * @param info
      */
-    public void setCharacter(String info){
-        MyIO.println(info);
-        String[] split = info.split(",");
+    private void setCharacter(String strInfo){
 
-        for(int i = 0; i < split.length; i++){ 
-            if(split[i].isEmpty())MyIO.println("nao informado");
-            else MyIO.println(split[i]);
-        }
+        MyIO.println(strInfo);
         
+        String[] arrInfos = new String[18];
+        arrInfos = splitInfo(strInfo);
+
+        /* 
+        setId(split[0]);
+        setName(split[1]);
+        //setAlternate_names(split[2]);
+        setHouse(split[3]);
+        setAncestry(split[4]);
+        setSpecies(split[5]);
+        setPatronus(split[6]);
+        set*/
+         
+
     }// setCharacter()
+
+}// class Character
+
+public class Registro {
+    static private String filePath;
+    public ArrayList<Character> characterList;
+    
+    /*** CONSTRUTORES ***/
+    Registro(){ this(1); }
+
+    Registro(int option){
+        characterList = new ArrayList<Character>();
+        if(option == 0) filePath = "/home/ricardo/Documents/cc-pucmg/3o Período/Aeds-II/TP02/characters.csv";
+        else filePath = "/tmp/characters.csv";
+    }
+
+    /******************/
+
+    /**
+     * Metodo para avaliar se o input = "FIM"
+     * @param input string contendo input do usuario
+     * @return booleano se e' fim ou nao
+     */
+    static public boolean isFim(String input){
+        return input.charAt(0) == 'F' && input.charAt(1) == 'I' && input.charAt(2) == 'M';
+    }// isFim()
 
     /**
      * Retorna as informacoes do personagem com o id parametrizado
@@ -163,8 +206,7 @@ public class Character{
         BufferedReader buffer;
 
         try{
-            //file = new FileReader("/tmp/characters.csv");
-            file = new FileReader("/home/ricardo/Documents/cc-pucmg/3o Período/Aeds-II/TP02/characters.csv");
+            file = new FileReader(filePath);
             buffer = new BufferedReader(file);
 
             info = searchId(id, buffer);
@@ -189,43 +231,53 @@ public class Character{
         String line = "";
         Boolean hasFoundId = false;
         try{
-           
             while((hasFoundId == false) && ((line = buffer.readLine()) != null)){
                 String idAtual = line.substring(0, line.indexOf(",")); // Atribui a string ate a primeira virgula
 
                 if(id.equals(idAtual))
                     hasFoundId = true;
             }
-
         } catch (Exception e) {MyIO.println(e.getMessage());}
-
-
         return line;
     }// searchId()
 
     /**
-     * Metodo para avaliar se o input = "FIM"
-     * @param input string contendo input do usuario
-     * @return booleano se e' fim ou nao
+     * Metodo que controla a insercao de um personagem no registro
+     * @param id Id do personagem a ser inserido
      */
-    static public boolean isFim(String input){
-        boolean resp = false;
-        if(input.charAt(0) == 'F' && input.charAt(1) == 'I' && input.charAt(2) == 'M')
-            resp = true;
-        return resp;
-    }// isFim()
+    public void addCharacter(String id){
+        String info = getCharacterInfo(id);
+        Character character = new Character(info);
+        //characterList.add(character);
+    }// addCharacter()
+
+    /**
+     * printa um personagem da lista, baseado no index
+     * @param index do personagem printado
+     */
+    public void printCharacter(int index){
+        MyIO.println(characterList.get(0).toString());
+    }// printCharacter()
+
+    /**
+     * Printa todos os personagens da lista
+     */
+    public void printCharacterList(){
+        for(int i = 0; i < characterList.size(); i++){
+            MyIO.println(characterList.get(i).toString());
+        }
+    }// printCharacterList()
 
     static public void main(String[] args){
-        ArrayList<Character> characterList = new ArrayList<Character>();
+        Registro registro = new Registro(0); // 0 = pc / void = VERDE
 
         String id = MyIO.readLine();
         while(!isFim(id)){
-            String info = getCharacterInfo(id);
-            Character character = new Character(info);
+            registro.addCharacter(id);
+            //registro.printCharacterList();
 
             id = MyIO.readLine();
         }
 
     }// main()
-
-}// class Character
+}
