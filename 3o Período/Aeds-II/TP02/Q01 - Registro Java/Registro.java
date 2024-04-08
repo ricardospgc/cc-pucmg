@@ -159,7 +159,7 @@ class Character{
      * @return true se for "True", else false
      */
     static public Boolean StringToBoolean(String str){
-        return (str.equals("True")) ? true : false;
+        return (str.equals("VERDADEIRO")) ? true : false;
     }// StringToBoolean()
 
     /**
@@ -171,18 +171,19 @@ class Character{
         str = str.replace("[","");
         str = str.replace("]", "");
 
-        ArrayList<String> list = new ArrayList<String>(Arrays.asList(str.split(",")));
+        ArrayList<String> list = new ArrayList<String>(Arrays.asList(str.split(";")));
 
         return list;
     }// StringToArrayList()
 
     /**
-     * Converte DMY - YMD e vice-versa
+     * Converte DMY -> YMD e vice-versa
      * @param str
      * @return string de data invertida
      */
     static public String formatDate(String str){
         String[] split = str.split("-");
+        if(split[1].length() == 1) split[1] = "0" + split[1];
         str = split[2] + "-" + split[1] + "-" + split[0];
         return str;
     }// formatDate()
@@ -193,14 +194,14 @@ class Character{
      * @return
      */
     public String ArrayListToString(ArrayList<String> arr){
-        String str = "[";
+        String str = "";
         
         for(int i = 0; i < arr.size(); i++){
-            str += arr.get(i) + ",";
+            str += arr.get(i) + ";";
         }
 
-        str = str.substring(0, str.length()-1) + "]";
-
+        str = str.substring(0, str.length()-1);
+        if(str.equals(" ")) str = "";
         return str;
     }// ArrayListToString()
 
@@ -213,10 +214,9 @@ class Character{
         String[] arrInfos = new String[18]; // 18 espaços para os 18 atributos
         String[] alternateInfos = new String[2]; // alternate names e alternate actors
         
-
-        strInfo = strInfo.replace("\"", ""); // retirando as aspas
+        strInfo = strInfo.replace("'", "");
         StringBuilder sbAux = new StringBuilder(strInfo);
-        
+
         // Trata alternate names e alternate actors
         int c = 2;
         do{
@@ -226,7 +226,7 @@ class Character{
             if(idxOfOpenBracket+1 != idxOfCloseBracket) // Se true, tem conteudo
                 alternateInfos[alternateInfos.length - c] = strInfo.substring(idxOfOpenBracket, idxOfCloseBracket+1);
             else // nao tem / nao informado
-                alternateInfos[alternateInfos.length - c] = "nao informado";
+                alternateInfos[alternateInfos.length - c] = "";
             // remove a string, +2 para incluir a virgula
             strInfo = sbAux.delete(idxOfOpenBracket, idxOfCloseBracket+2).toString();
 
@@ -234,13 +234,14 @@ class Character{
         } while(c > 0);
 
         //Preenche arrInfos com os atributos
-        strInfo += ", , ";
-        arrInfos = strInfo.split(",");
+        strInfo += "; ; ";
+        arrInfos = strInfo.split(";");
         arrInfos[16] = alternateInfos[0];
         arrInfos[17] = alternateInfos[1];
 
         return arrInfos;
-    }
+        
+    }//splitInfo()
 
     /**
      * atribui os atributos ao personagem
@@ -278,10 +279,11 @@ class Character{
      * @param index do personagem printado
      */
     public void printCharacter(){
+        MyIO.print("[");
         MyIO.print(getId() + " ## ");
         MyIO.print(getName() + " ## ");
 
-        MyIO.print(ArrayListToString(getAlternate_names()) + " ## ");
+        MyIO.print("{" + ArrayListToString(getAlternate_names()) + "}" + " ## ");
 
         MyIO.print(getHouse() + " ## ");
         MyIO.print(getAncestry() + " ## ");
@@ -292,7 +294,7 @@ class Character{
         MyIO.print(getActorName() + " ## ");
         MyIO.print(getAlive() + " ## ");
 
-        MyIO.print(ArrayListToString(getAlternate_actors()) + " ## ");
+        //MyIO.print(ArrayListToString(getAlternate_actors()) + " ## ");
 
         MyIO.print(formatDate(getDateOfBirth().toString()) + " ## ");
 
@@ -300,9 +302,8 @@ class Character{
         MyIO.print(getEyeColor() + " ## ");
         MyIO.print(getGender() + " ## ");
         MyIO.print(getHairColor() + " ## ");
-        MyIO.println(getWizard());
-
-        
+        MyIO.print(getWizard());     
+        MyIO.println("]");   
         
     }// printCharacter()
 
@@ -325,7 +326,7 @@ public class Registro {
 
     /**
      * Metodo para avaliar se o input = "FIM"
-     * @param input string contendo input do usuario
+     * @param input string contendo input
      * @return booleano se e' fim ou nao
      */
     static public boolean isFim(String input){
@@ -370,7 +371,7 @@ public class Registro {
         Boolean hasFoundId = false;
         try{
             while((hasFoundId == false) && ((csvLine = buffer.readLine()) != null)){
-                String idAtual = csvLine.substring(0, csvLine.indexOf(",")); // Atribui a string ate a primeira virgula
+                String idAtual = csvLine.substring(0, csvLine.indexOf(";")); // Atribui a string ate a primeira virgula
 
                 if(id.equals(idAtual))
                     hasFoundId = true;
@@ -402,9 +403,9 @@ public class Registro {
         Registro registro = new Registro(0); // 0 = pc / void = VERDE
 
         String id = MyIO.readLine();
+    
         while(!isFim(id)){
             registro.addCharacter(id);
-
             id = MyIO.readLine();
         }
 
