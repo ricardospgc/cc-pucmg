@@ -307,6 +307,41 @@ class Character{
         
     }// printCharacter()
 
+    /**
+     * Retorna um clone do character corrente
+     * @return Character clone
+     */
+    public Character clone() {
+        Character clone = new Character();
+
+        clone.setId(this.getId());
+        clone.setName(this.getName());
+        clone.setHouse(this.getHouse());
+        clone.setAncestry(this.getAncestry());
+        clone.setSpecies(this.getSpecies());
+        clone.setPatronus(this.getPatronus());
+        clone.setHogwartsStaff(this.getHogwartsStaff());
+        clone.setHogwartsStudent(this.getHogwartsStudent());
+        clone.setActorName(this.getActorName());
+        clone.setAlive(this.getAlive());
+        clone.setDateOfBirth(this.getDateOfBirth());
+        clone.setYearOfBirth(this.getYearOfBirth());
+        clone.setEyeColor(this.getEyeColor());
+        clone.setGender(this.getGender());
+        clone.setHairColor(this.getHairColor());
+        clone.setWizard(this.getWizard());
+
+        // Deep copy for ArrayLists
+        if (this.alternate_names != null) {
+            clone.setAlternate_names(new ArrayList<>(this.getAlternate_names()));
+        }
+        if (this.alternate_actors != null) {
+            clone.setAlternate_actors(new ArrayList<>(this.getAlternate_actors()));
+        }
+
+        return clone;
+    }// clone()
+
 }// class Character
 
 public class Registro {
