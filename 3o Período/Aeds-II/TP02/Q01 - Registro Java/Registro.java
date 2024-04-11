@@ -197,7 +197,7 @@ class Character{
         String str = "";
         
         for(int i = 0; i < arr.size(); i++){
-            str += arr.get(i) + ";";
+            str += arr.get(i) + ",";
         }
 
         str = str.substring(0, str.length()-1);
