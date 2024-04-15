@@ -289,10 +289,10 @@ class Character{
         MyIO.print(getAncestry() + " ## ");
         MyIO.print(getSpecies() + " ## ");
         MyIO.print(getPatronus() + " ## ");
-        /*MyIO.print(getHogwartsStaff() + " ## ");*/ MyIO.print("false ## ");
-        /*MyIO.print(getHogwartsStudent() + " ## ");*/ MyIO.print("false ## ");
+        MyIO.print(getHogwartsStaff() + " ## ");
+        MyIO.print(getHogwartsStudent() + " ## ");
         MyIO.print(getActorName() + " ## ");
-        /*MyIO.print(getAlive() + " ## ");*/ MyIO.print("false ## ");
+        MyIO.print(getAlive() + " ## ");
 
         MyIO.print(formatDate(getDateOfBirth().toString()) + " ## ");
 
