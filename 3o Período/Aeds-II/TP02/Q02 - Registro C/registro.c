@@ -12,6 +12,7 @@
 struct Character {
     char id[50];
     char name[50];
+    char alternateNames[130];
     char house[50];
     char ancestry[50];
     char species[50];
@@ -20,18 +21,24 @@ struct Character {
     bool hogwartsStudent;
     char actorName[50];
     bool alive;
-    char dateOfBirth[20];
+    char alternateActors[100];
+    char dateOfBirth[10];
     int yearOfBirth;
     char eyeColor[20];
     char gender[10];
     char hairColor[20];
     bool wizard;
-
-    
 }; // struct Character
 
+// retorna se uma string e' VERDADEIRO
+bool stringToBool(char* str){
+    return strlen(str) >= strlen("VERDADEIRO");
+}
+
+// Separa a string e seta os valores no Character
 void setCharacter(char* info, struct Character *character){
     int count = 0;
+
     char *token = strtok(info, ";");
 
     // Cada iteração preenche um atributo, aumenta o contador e passa para o próximo caso
@@ -46,46 +53,51 @@ void setCharacter(char* info, struct Character *character){
                 strcpy(character->name, token);
                 break;
             case 2:
+                strcpy(character->alternateNames, token);
+            case 3:
                 strcpy(character->house, token);
                 break;
-            case 3:
+            case 4:
                 strcpy(character->ancestry, token);
                 break;
-            case 4:
+            case 5:
                 strcpy(character->species, token);
                 break;
-            case 5:
+            case 6:
                 strcpy(character->patronus, token);
                 break;
-            case 6:
-                character->hogwartsStaff = atoi(token);
-                break;
             case 7:
-                character->hogwartsStudent = atoi(token);
+                character->hogwartsStaff = stringToBool(token);
                 break;
             case 8:
-                strcpy(character->actorName, token);
+                character->hogwartsStudent = stringToBool(token);
                 break;
             case 9:
-                character->alive = atoi(token);
+                strcpy(character->actorName, token);
                 break;
             case 10:
-                strcpy(character->dateOfBirth, token);
+                character->alive = stringToBool(token);
                 break;
             case 11:
-                character->yearOfBirth = atoi(token);
+                strcpy(character->alternateActors, token);
                 break;
             case 12:
-                strcpy(character->eyeColor, token);
+                strcpy(character->dateOfBirth, token);
                 break;
             case 13:
-                strcpy(character->gender, token);
+                character->yearOfBirth = atoi(token);
                 break;
             case 14:
-                strcpy(character->hairColor, token);
+                strcpy(character->eyeColor, token);
                 break;
             case 15:
-                character->wizard = atoi(token);
+                strcpy(character->gender, token);
+                break;
+            case 16:
+                strcpy(character->hairColor, token);
+                break;
+            case 17:
+                character->wizard = stringToBool(token);
                 break;
             default:
                 printf("Atributo não reconhecido: %s\n", token);
@@ -93,15 +105,47 @@ void setCharacter(char* info, struct Character *character){
         }
 
         // Atualiza o token e o contador
-        token = strtok(NULL, ";");
         count++;
+        token = strtok(NULL, ";");
     }
+
 }// setCharacter()
+
+void printCharacter(struct Character character){
+    printf("[");
+    printf("%s ## ", character.id);
+    printf("%s ## ", character.name);
+    printf("%s ## ", character.alternateNames);
+    printf("%s ## ", character.house);
+    printf("%s ## ", character.ancestry);
+    printf("%s ## ", character.species);
+
+    // caso seja vazio
+    if(strlen(character.patronus) > 1) printf("%s", character.patronus);
+    printf(" ## ");
+    
+    printf("%s ## ", character.hogwartsStaff ? "true" : "false");
+    printf("%s ## ", character.hogwartsStudent ? "true" : "false");
+    
+    // caso seja vazio
+    if(strlen(character.actorName) > 1) printf("%s", character.actorName);
+    printf(" ## ");
+
+    printf("%s ## ", character.alive ? "true" : "false");
+    //printf("{%s} ## ", character.alternateActors);
+    printf("%s ## ", character.dateOfBirth);
+    printf("%d ## ", character.yearOfBirth);
+    printf("%s ## ", character.eyeColor);
+    printf("%s ## ", character.gender);
+    printf("%s ## ", character.hairColor);
+    printf("%s", character.wizard ? "true" : "false");
+    printf("]\n");
+}
 
 /********* Registro *********/
 struct Registro {
     char filePath[100];
-    struct Character *characterList;
+    struct Character characterList[MAX_CHARACTERS];
     int size;
 }; // struct Registro
 
@@ -111,11 +155,10 @@ struct Registro {
  * @param int option opcao de inicializacao de path
 */
 void newRegistro(struct Registro *registro, int pathOption){
-    registro->characterList = NULL;
     registro->size = 0;
 
     if (pathOption == 0)
-        strcpy(registro->filePath, "/home/ricardo/Documents/cc-pucmg/3o Período/Aeds-II/TP02/characters.csv");
+        strcpy(registro->filePath, "/home/ricardo/Documents/cc-pucmg/3o Período/Aeds-II/characters.csv");
     else
         strcpy(registro->filePath, "/tmp/characters.csv");
 }// newRegistro
@@ -158,21 +201,85 @@ void getCharacterInfo(char* info, const char* id, struct Registro *registro) {
     fclose(file);
 }// getCharacterInfo()
 
+// remove o caractere desejado da string
+void removeChars(char *str, char c)
+{
+    int writer = 0, reader = 0;
+
+    while (str[reader]) {
+        if (str[reader] != c) { // se o caractere for igual, atualiza 
+            str[writer++] = str[reader];
+        }
+        reader++;       
+    }
+
+    str[writer]=0;
+}// removeChars
+
+// Retira as ; duplas e coloca caractere vazio
+void trataPVduplo(char *info){
+    int i = 0; // index da letra
+
+    while(info[i] != '\0'){
+        if(info[i] == ';' && info[i+1] == ';'){
+        
+        //Shift das letras para a direita, abrindo espaço para o char ' '
+        for(int j = strlen(info); j > i+1; j--){
+            info[j] = info[j - 1];
+        }
+        
+        info[i+1] = ' ';
+        }
+    i++;
+  }
+}// trataPvduplo
+
+// Troca a primeira ocorrencia de um char pelo outro
+void replaceChar(char* str, char chOrigin, char chReplace){
+    char* ret = strchr(str, chOrigin);
+    str[strlen(str) - strlen(ret)] = chReplace;
+}// replaceChar 
+
 /**
  * Adiciona o personagem no registro
  * @param char* id Id a ser adicionado
  * @param struct Registro 
 */
 void addCharacter(const char* id, struct Registro *registro) {
+    // encontrar a informacao do personagem
     char info[MAX_INFO_LENGTH] = {0};
     getCharacterInfo(info, id, registro);
+
+    //tratamento da string info para adequar ao personagem
+    trataPVduplo(info); //quando for ;; tem que ser vazio
+    removeChars(info, '\''); // remove aspas simples
+    replaceChar(info, '[', '{');
+    replaceChar(info, ']', '}');
+
+    // atribuir os valores ao personagem
     struct Character character;
     setCharacter(info, &character);
-} // addCharacter()
+
+    // insercao no registro
+    if (registro->size >= MAX_CHARACTERS) {
+        printf("Registro cheio!\n");
+        return;
+    }
+    registro->characterList[registro->size] = character;
+    registro->size++;
+
+}// addCharacter()
+
+// printa todos os personagens do registro
+void printRegistro(struct Registro registro){
+    for(int i = 0; i < registro.size; i++){
+        printCharacter(registro.characterList[i]);
+    }
+}// printaRegistro()
 
 int main(){
     struct Registro registro;
-    newRegistro(&registro, 0); // 0 = pc / 1 = VERDE
+    newRegistro(&registro, 1); // 0 = pc / 1 = VERDE
 
     char id[50] = {0};
     scanf("%s", id);
@@ -182,6 +289,8 @@ int main(){
 
         scanf("%s", id);
     }
+
+    printRegistro(registro);
 
     return 0;
 }// main()
