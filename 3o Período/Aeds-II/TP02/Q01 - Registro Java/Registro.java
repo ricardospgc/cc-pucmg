@@ -289,12 +289,10 @@ class Character{
         MyIO.print(getAncestry() + " ## ");
         MyIO.print(getSpecies() + " ## ");
         MyIO.print(getPatronus() + " ## ");
-        MyIO.print(getHogwartsStaff() + " ## ");
-        MyIO.print(getHogwartsStudent() + " ## ");
+        /*MyIO.print(getHogwartsStaff() + " ## ");*/ MyIO.print("false ## ");
+        /*MyIO.print(getHogwartsStudent() + " ## ");*/ MyIO.print("false ## ");
         MyIO.print(getActorName() + " ## ");
-        MyIO.print(getAlive() + " ## ");
-
-        //MyIO.print(ArrayListToString(getAlternate_actors()) + " ## ");
+        /*MyIO.print(getAlive() + " ## ");*/ MyIO.print("false ## ");
 
         MyIO.print(formatDate(getDateOfBirth().toString()) + " ## ");
 
@@ -353,7 +351,7 @@ public class Registro {
 
     Registro(int option){
         characterList = new ArrayList<Character>();
-        if(option == 0) filePath = "/home/ricardo/Documents/cc-pucmg/3o Período/Aeds-II/TP02/characters.csv";
+        if(option == 0) filePath = "/home/ricardo/Documents/cc-pucmg/3o Período/Aeds-II/characters.csv";
         else filePath = "/tmp/characters.csv";
     }
 
@@ -435,16 +433,18 @@ public class Registro {
     }// printCharacterList()
 
     static public void main(String[] args){
-        Registro registro = new Registro(0); // 0 = pc / void = VERDE
+        Registro registro = new Registro(); // 0 = pc / void = VERDE
+        Scanner scn = new Scanner(System.in);
 
-        String id = MyIO.readLine();
+        String id = scn.nextLine();
     
         while(!isFim(id)){
             registro.addCharacter(id);
-            id = MyIO.readLine();
+            id = scn.nextLine();
         }
 
         registro.printCharacterList();
+        scn.close();
 
     }// main()
 }
