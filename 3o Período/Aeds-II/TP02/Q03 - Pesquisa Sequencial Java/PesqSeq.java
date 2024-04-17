@@ -444,7 +444,7 @@ public class PesqSeq{
         } catch (IOException e) {
             System.out.println("Erro ao escrever o log no arquivo: " + e.getMessage());
         }
-    }// criarLog
+    }// criarLog()
 
     /**
      * Metodo para avaliar se o input = "FIM"
@@ -473,7 +473,7 @@ public class PesqSeq{
             numComparacoes++;
         }
         return resp;
-    }// pesqSeq
+    }// pesqSeq()
 
     /**
      * Controla o fluxo e a chamada da funcao de pesquisa
@@ -490,11 +490,11 @@ public class PesqSeq{
         time += (float)Duration.between(start, end).toMillis();
 
         return resp;
-    }// pesquisa
+    }// pesquisa()
 
     static public void main(String[] args){
         Scanner scn = new Scanner(System.in);
-        Registro registro = new Registro(0); // 0 = pc / void = VERDE
+        Registro registro = new Registro(); // 0 = pc / void = VERDE
 
         // Leitura e armazenamento de personagens
         String id = scn.nextLine();
