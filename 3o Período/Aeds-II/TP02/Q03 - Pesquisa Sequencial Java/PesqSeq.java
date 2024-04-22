@@ -431,7 +431,7 @@ public class PesqSeq{
 
     public static float time = 0;
 
-    public static String logFileName = "pesquisa_sequencial.txt";
+    public static String logFileName = "803833_sequencial.txt";
 
     /**
      * Cria um arquivo com informacoes da execucao do algoritmo
@@ -494,7 +494,7 @@ public class PesqSeq{
 
     static public void main(String[] args){
         Scanner scn = new Scanner(System.in);
-        Registro registro = new Registro(); // 0 = pc / void = VERDE
+        Registro registro = new Registro(0); // 0 = pc / void = VERDE
 
         // Leitura e armazenamento de personagens
         String id = scn.nextLine();
