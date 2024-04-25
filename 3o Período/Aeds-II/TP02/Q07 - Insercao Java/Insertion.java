@@ -477,6 +477,31 @@ public class Insertion{
         numMovimentacoes += 3;
     }// swap()
 
+    /**
+     * Compara atributos entre personagens e desempata caso sejam iguais 
+     * @param a
+     * @param b
+     * @return 1 se a for maior, 0 se iguais, -1 se b for maior
+     */
+    public static int cmpCharacter(Character a, Character b){
+        int cmp = 0;
+        
+        boolean after = a.getDateOfBirth().isAfter(b.getDateOfBirth());
+        numComparacoes++;
+        boolean before = a.getDateOfBirth().isBefore(b.getDateOfBirth());
+        numComparacoes++;
+
+        // desempata por nome caso DateOfBirth for igual
+        if(before) cmp = -1;
+        else if(after) cmp = 1;
+        else {
+            cmp = a.getName().compareTo(b.getName());
+            numComparacoes++;
+        }
+        
+        return cmp;
+    }// cmpCharacter()
+
     /****** QUESTAO *******/
 
     /**
@@ -490,7 +515,7 @@ public class Insertion{
             int j = i - 1;
 
             // Ordena por DateOfBirth
-            while ((j >= 0) && (list.get(j).getDateOfBirth().isAfter(tmp.getDateOfBirth()))) {
+            while ((j >= 0) && cmpCharacter(list.get(j), tmp) > 0) {
                 numComparacoes++;
                 list.set(j + 1, list.get(j));
                 numMovimentacoes++;
@@ -499,18 +524,6 @@ public class Insertion{
             list.set(j + 1, tmp);
             numMovimentacoes++;
 
-            // Ordena por nome, caso DateOfBirth seja igual
-            while(
-            (j >= 0) && 
-            (list.get(j).getDateOfBirth().equals(tmp.getDateOfBirth())) &&
-            (list.get(j).getName().compareTo(tmp.getName()) > 0)){
-                numComparacoes++;
-                list.set(j + 1, list.get(j));
-                numMovimentacoes++;
-                j--;
-            }
-            list.set(j + 1, tmp);
-            numMovimentacoes++;
         }
     }// insertion()
 
@@ -529,7 +542,7 @@ public class Insertion{
 
     static public void main(String[] args){
         Scanner scn = new Scanner(System.in);
-        Registro registro = new Registro(); // 0 = pc / void = VERDE
+        Registro registro = new Registro(0); // 0 = pc / void = VERDE
 
         // Leitura e armazenamento de personagens
         String id = scn.nextLine();
