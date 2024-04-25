@@ -342,6 +342,26 @@ void printListAttribute(Registro registro){
     }
 }// printListAttribute()
 
+int cmpCharacter(Character a, Character b){
+    // trata excessao de letra maiuscula no eyeColor
+    char aEyeCol[20] = {0}; strcpy(aEyeCol, a.eyeColor);
+    char bEyeCol[20] = {0}; strcpy(bEyeCol, b.eyeColor);
+    strToLower(aEyeCol);
+    strToLower(bEyeCol);
+
+
+    int cmp = strcmp(aEyeCol, bEyeCol);
+    numComp++;
+
+    // desempata por nome caso HairColor for igual
+    if(cmp == 0){
+        cmp = strcmp(a.name, b.name);
+        numComp++;
+    }
+    
+    return cmp;
+}// cmpCharacter()
+
 /***** QUESTAO ******/
 
 // Insertion Sort por cor
@@ -350,28 +370,9 @@ void insercaoPorCor(Character *list, int size, int cor, int h){
         Character tmp = list[i];
         numMov++;
         int j = i - h;
-
-        // trata excessao de letra maiuscula no eyeColor
-        char tmpEyeCol[20] = {0}; strcpy(tmpEyeCol, tmp.eyeColor);
-        char jEyeCol[20] = {0}; strcpy(jEyeCol, list[j].eyeColor);
-        strToLower(tmpEyeCol);
-        strToLower(jEyeCol);
         
         // Ordena baseado no eyeColor
-        while ((j >= 0) && (strcmp(jEyeCol, tmpEyeCol) > 0)) {
-            numComp++;
-            list[j + h] = list[j];
-            numMov++;
-            j -= h;
-            strcpy(jEyeCol, list[j].eyeColor);
-        }
-        list[j + h] = tmp;
-        numMov++;
-
-        // Caso as cores forem iguais, ordena pelo nome
-        while((j >= 0) &&
-        (strcmp(jEyeCol, tmpEyeCol) == 0) &&
-        strcmp(list[j].name, tmp.name) > 0){
+        while ((j >= 0) && (cmpCharacter(list[j], tmp) > 0)) {
             numComp++;
             list[j + h] = list[j];
             numMov++;
@@ -421,7 +422,7 @@ void criarLog(){
 
 int main(){
     Registro registro;
-    newRegistro(&registro, 1); // 0 = pc / 1 = VERDE
+    newRegistro(&registro, 0); // 0 = pc / 1 = VERDE
 
     char id[50] = {0};
 
@@ -435,7 +436,7 @@ int main(){
     sort(registro.characterList, registro.size);
 
     printRegistro(registro);
-
+    
     criarLog();
 
     return 0;
