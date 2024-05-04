@@ -347,11 +347,12 @@ class Registro {
     public ArrayList<Character> characterList;
     
     /*** CONSTRUTORES ***/
-    Registro(){ this(1); }
+    Registro(){ this(2); }
 
     Registro(int option){
         characterList = new ArrayList<Character>();
         if(option == 0) filePath = "/home/ricardo/Documents/cc-pucmg/3o Período/Aeds-II/characters.csv";
+        else if (option == 1) filePath = "../../../../csv/characters.csv";
         else filePath = "/tmp/characters.csv";
     }
 
@@ -427,7 +428,7 @@ class Registro {
      * Printa somente um atributo de todos os personagens da lista
      */
     public void printListAttribute(){
-        characterList.forEach(n -> { MyIO.println(n.getName() + " " + n.getHairColor()) ;});
+        characterList.forEach(n -> { MyIO.println(n.getName() + ": " + n.getYearOfBirth()) ;});
     }// printListAttribute()
 
 }// class Registro
@@ -477,10 +478,33 @@ public class Countingsort{
         numMovimentacoes += 3;
     }// swap()
 
+    /**
+     * Compara atributos entre personagens e desempata caso sejam iguais 
+     * @param a
+     * @param b
+     * @return 1 se a for maior, 0 se iguais, -1 se b for maior
+     */
+    public static int cmpCharacter(Character a, Character b){
+        int cmp = a.getYearOfBirth().compareTo(b.getYearOfBirth());
+        numComparacoes++;
+
+        // desempata por nome caso HairColor for igual
+        if(cmp == 0){
+            cmp = a.getName().compareTo(b.getName());
+            numComparacoes++;
+        }
+        
+        return cmp;
+    }// cmpCharacter()
+
     /****** QUESTAO *******/
 
-    // ordenacao por counting sort, com YearOfBirth
+    /**
+     * Counting Sort por YEarOfBirth
+     * @param list
+     */
     public static void countingSort(ArrayList<Character> list){
+
         //Array para contar o numero de ocorrencias de cada elemento
         int[] count = new int[getMaior(list, list.size()) + 1];
         Character[] ordenado = new Character[list.size()];
@@ -505,7 +529,12 @@ public class Countingsort{
         sortByName(list); // ordena apenas por nome, desempatando
     }// countingSort()
 
-    // Retorna o maior
+    /**
+     * Retorna o maior elemento da lista
+     * @param list
+     * @param tam da lista
+     * @return int maior
+     */
     public static int getMaior(ArrayList<Character> list, int tam) {
         int maior = list.get(0).getYearOfBirth();
 
@@ -516,15 +545,17 @@ public class Countingsort{
         return maior;
     }// getMaior()
 
-    // Ordena a lista por nome
+    /**
+     * Insertion Sort por nome quando YearOfBirth
+     * @param list
+     */
     public static void sortByName(ArrayList<Character> list){
         for (int i = 1; i < list.size(); i++) {
             Character tmp = list.get(i).clone();
             numMovimentacoes++;
             int j = i - 1;
 
-            // Ordena por DateOfBirth
-            while ((j >= 0) && list.get(j).getName().compareTo(tmp.getName()) > 0) {
+            while ((j >= 0) && cmpCharacter(list.get(j), tmp) > 0) {
                 numComparacoes++;
                 list.set(j + 1, list.get(j));
                 numMovimentacoes++;
@@ -550,7 +581,7 @@ public class Countingsort{
 
     static public void main(String[] args){
         Scanner scn = new Scanner(System.in);
-        Registro registro = new Registro(); // 0 = pc / void = VERDE
+        Registro registro = new Registro(); // 0 = linux / 1 = Windows / void = VERDE
 
         // Leitura e armazenamento de personagens
         String id = scn.nextLine();
