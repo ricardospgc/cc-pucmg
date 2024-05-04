@@ -347,11 +347,10 @@ void printListAttribute(Registro registro){
 }// printListAttribute()
 
 int cmpCharacter(Character a, Character b){
-    // trata excessao de letra maiuscula no eyeColor
     int cmp = strcmp(a.house, b.house);
     numComp++;
 
-    // desempata por nome caso HairColor for igual
+    // desempata por nome caso House for igual
     if(cmp == 0){
         cmp = strcmp(a.name, b.name);
         numComp++;
