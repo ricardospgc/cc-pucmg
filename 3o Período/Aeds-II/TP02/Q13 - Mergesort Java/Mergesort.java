@@ -440,7 +440,7 @@ public class Mergesort{
 
     public static float time = 0;
 
-    public static String logFileName = "803833_countingsort.txt";
+    public static String logFileName = "803833_mergesort.txt";
 
     /**
      * Cria um arquivo com informacoes da execucao do algoritmos
@@ -567,7 +567,7 @@ public class Mergesort{
 
     static public void main(String[] args){
         Scanner scn = new Scanner(System.in);
-        Registro registro = new Registro(1); // 0 = linux / 1 = Windows / void = VERDE
+        Registro registro = new Registro(); // 0 = linux / 1 = Windows / void = VERDE
 
         // Leitura e armazenamento de personagens
         String id = scn.nextLine();
