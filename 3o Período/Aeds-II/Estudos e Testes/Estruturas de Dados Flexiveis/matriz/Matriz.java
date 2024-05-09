@@ -132,15 +132,115 @@ public class Matriz {
      */
     public void printDiagPrincipal(){
         if(this.isQuadrada()){
-            
-            MyIO.print("[ ");
-            
-            for(Celula i = inicio; i.dir != null; i = i.dir.inf){
-                MyIO.print(i.elemento + " ");
-            }
+            Celula i = this.inicio;
+            MyIO.print("[ " + i.elemento);
 
-            MyIO.println("]");
+            while(i.dir != null){
+                i = i.dir;
+                i = i.inf;
+
+                MyIO.print(" " + i.elemento);
+            }
+            MyIO.println(" ]");
+        } else 
+            MyIO.println("Matriz nao quadrada, nao ha diagonal principal!");
+    }// printDiagPrincipal()
+
+    /**
+     * Printa a diagonal secundaria da matriz
+     * Superior direito > inferior esquerdo
+     */
+    public void printDiagSecundaria(){
+        if(this.isQuadrada()){
+            Celula i = this.inicio;
+            // leva o i para a ultima coluna
+            while(i.dir != null){ i = i.dir; }
+
+            MyIO.print("[ " + i.elemento);
+            while(i.esq != null){
+                i = i.esq;
+                i = i.inf;
+
+                MyIO.print(" " + i.elemento);
+            }
+            MyIO.println(" ]");
+        } else 
+            MyIO.println("Matriz nao quadrada, nao ha diagonal secundaria!");
+    }// printDiagSecundaria
+
+    /**
+     * Retorna a matriz resultante da 
+     * soma entre a matriz corrente e a parametrizada
+     * @param m Matriz parcela
+     * @return Matriz resultante
+     */
+    public Matriz soma(Matriz m){
+        if(!((this.lin == m.lin) && (this.col == m.col))){ // As matrizes precisam ter as mesmas dimensoes
+            MyIO.println("Nao e' possivel somar matrizes de tipos diferentes. Retornando 'm'.");
+            return m;
+        } else {
+
+            Matriz resp = new Matriz(this.lin, this.col);
+            
+            Celula thisLin = this.inicio;
+            Celula thisCol = thisLin;
+
+            Celula mLin = m.inicio;
+            Celula mCol = mLin;
+            
+            for(Celula respLin = resp.inicio; respLin != null; respLin = respLin.inf){
+                thisCol = thisLin; // retorna thisCol para o inicio da linha
+                mCol = mLin; // retorna mCol para o inicio da linha
+
+                for(Celula respCol = respLin; respCol != null; respCol = respCol.dir){
+                    respCol.elemento = thisCol.elemento + mCol.elemento;
+
+                    //proxima coluna
+                    thisCol = thisCol.dir; 
+                    mCol = mCol.dir;
+                }
+
+                // proxima linha
+                thisLin = thisLin.inf;
+                mLin = mLin.inf;
+            }
+            
+            return resp;
         }
-    }// printDiagPrincipal
+    }// soma()
+
+    /**
+     * Retorna a matriz resultante da 
+     * multiplicacao entre a matriz corrente e a parametrizada
+     * @param m Matriz fator
+     * @return Matriz resultante
+     */
+    public Matriz multiplica(Matriz m){
+        if(!(this.col == m.lin)){
+            MyIO.println("Nao e' possivel multiplicar matrizes dessas proporcoes. Retornando 'm'.");
+            return m;
+        } else {
+            Matriz m3 = new Matriz(this.lin, m.col);
+
+            /*
+            * Para achar o elemento da posicao (i,j) da matriz resultante
+            * multiplica cada elemento da linha i da primeira matriz pelos
+            * elementos correspondentes da coluna j da matriz parametrizada 
+            * e soma os produtos
+            * 
+            * Ex:
+            *     2 3
+            *     9 1   5 7 4
+            *     0 8   6 2 3
+            *
+            * (0,0) da Matriz = (2*5)+(3*6)
+            * (1,0) = (9*5)+(1*6)
+            * ...
+            * (3,3) = (0*4)+(8*3) 
+            */
+
+            return m3;
+        }
+    }//multiplica()
 
 }// class Matriz

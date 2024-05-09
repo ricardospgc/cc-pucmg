@@ -13,4 +13,4 @@ public class Celula {
         this.sup = sup;
         this.inf = inf;
     }
-} 
+}// class Celula
