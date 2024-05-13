@@ -1,3 +1,17 @@
+class Celula {
+    public int elemento;
+    public Celula prox;
+
+    Celula(){
+        this(-1);
+    }
+
+    Celula(int elemento){
+        this.elemento = elemento;
+        this.prox = null;
+    }
+}
+
 public class ListaSimples {
     private Celula primeiro; // Celula cabeca, sempre vazia, aponta para o primeiro
     private Celula ultimo; // Indica o fim da estrutura, aponta para o ultimo ("eh o ultimo")
