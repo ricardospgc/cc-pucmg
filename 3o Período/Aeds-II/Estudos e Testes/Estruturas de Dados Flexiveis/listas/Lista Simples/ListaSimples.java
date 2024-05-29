@@ -153,12 +153,12 @@ public class ListaSimples {
      * Mostra todos os elementos da lista no console
      */
     public void mostrar(){
-        MyIO.print("[ ");
+        System.out.print("[ ");
 
         for(Celula i = primeiro.prox; i != null; i = i.prox){
-            MyIO.print(i.elemento + " ");
+            System.out.print(i.elemento + " ");
         }
-        MyIO.println("]");
+        System.out.println("]");
     }// mostrar()
 
     /**

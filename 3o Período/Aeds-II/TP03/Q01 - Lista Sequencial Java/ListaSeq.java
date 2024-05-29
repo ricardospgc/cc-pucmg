@@ -578,12 +578,12 @@ public class ListaSeq {
      * Mostra os elementos da lista
      */
     public void mostrar(){
-        MyIO.print("[");
         for(int i = 0; i < size; i++){
+            MyIO.print("[");
             MyIO.print(i + " ## ");
             lista[i].printCharacter();
+            MyIO.println("]");
         }
-        MyIO.println("]");
     }// fim mostrar()
 
     /**
@@ -598,7 +598,7 @@ public class ListaSeq {
     
     static public void main(String[] args){
         Scanner scn = new Scanner(System.in);
-        ListaSeq lista = new ListaSeq(0); // 0 = linux / 1 = Windows / void = VERDE
+        ListaSeq lista = new ListaSeq(); // 0 = linux / 1 = Windows / void = VERDE
         
         try{
             // Leitura e armazenamento de personagens
@@ -610,11 +610,12 @@ public class ListaSeq {
                 id = scn.nextLine();
             }
 
-            int count = scn.nextInt();
+            int count = Integer.parseInt(scn.nextLine());
+            
             while(count > 0){
                 String input[] = scn.nextLine().split(" ");
                 lista.escolheOpcao(input);
-
+                
                 count--;
             }
 
