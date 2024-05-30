@@ -112,7 +112,6 @@ void setCharacter(char* info, struct Character *character){
 }// setCharacter()
 
 void printCharacter(struct Character character){
-    printf("[");
     printf("%s ## ", character.id);
     printf("%s ## ", character.name);
     printf("%s ## ", character.alternateNames);
@@ -139,7 +138,6 @@ void printCharacter(struct Character character){
     printf("%s ## ", character.gender);
     printf("%s ## ", character.hairColor);
     printf("%s", character.wizard ? "true" : "false");
-    printf("]\n");
 }
 
 /********* Lista *********/
@@ -267,34 +265,174 @@ struct Character getCharacter(const char* id, struct ListaSeq *lista) {
 }// getCharacter()
 
 /***************** LISTA SEQUENCIAL ******************/
+/****** INSERCOES ******/
 
 // Insere o elemento no inicio da lista
-void inserirInicio(struct ListaSeq lista, struct Character c){
-    if(lista.size < sizeof(lista)) {
-        for(int i = lista.size; i > 0; i--){
-            lista.characterList[i] = lista.characterList[i - 1];
+void inserirInicio(struct ListaSeq *lista, struct Character c){
+    // Verifica se eh possivel inserir
+    if(lista->size >= sizeof(*lista)) {
+        printf("Erro ao inserir! Lista cheia!");
+    } else {
+        // Shift dos elementos para a direita, liberando espaco no inicio
+        for(int i = lista->size; i > 0; i--){
+            lista->characterList[i] = lista->characterList[i - 1];
         }
 
-        lista.characterList[0] = c;
-
-        lista.size++;
-    } else {
-        printf("Erro ao inserir! Lista cheia!");
+        // Insere o elemento na primeira posicao da lista
+        lista->characterList[0] = c;
+        // atualiza o total
+        lista->size++;
     }
 }// inserirInicio()
 
+// Insere o elemento no fim da lista
+void inserirFim(struct ListaSeq *lista, struct Character c){
+    // Verifica se eh possivel inserir
+    if(lista->size >= sizeof(*lista)){
+        printf("Erro ao inserir! Lista cheia!");
+    } else {
+        lista->characterList[lista->size] = c;
+        lista->size++;
+    }
+}// inserirFim()
 
+// Insere o elemento na posicao parametrizada
+void inserirPos(struct ListaSeq *lista, struct Character c, int pos){
+    // Verifica se eh possivel inserir
+    if(lista->size >= sizeof(*lista)) printf("Erro ao inserir! Lista cheia!");
+    else if(pos > lista->size || pos < 0) printf("Erro ao inserir! Posicao invalida!");
+    else {
+        // Shift dos elementos para a direita, ate a posicao, liberando espaco
+        for(int i = lista->size; i > pos; i--){
+            lista->characterList[i] = lista->characterList[i - 1];
+        }
+
+        lista->characterList[pos] = c;
+        lista->size++;
+    }
+}// inserirPos()
+
+/****** REMOCOES ******/
+
+// Remove o primeiro elemento da lista
+struct Character removerInicio(struct ListaSeq *lista){
+    // Verifica se e' possivel remover
+    if(lista->size == 0){
+        printf("Erro ao remover! Lista vazia!");
+        exit(1);
+    } else {
+        struct Character removido = lista->characterList[0];
+        lista->size--;
+
+        // Shift para esquerda, ocupando o espaco do removido
+        for(int i = 0; i < lista->size; i++){
+            lista->characterList[i] = lista->characterList[i + 1];
+        }
+
+        return removido;
+    }
+}// removerInicio()
+
+// Remove o ultimo elemento da lista
+struct Character removerFim(struct ListaSeq *lista){
+    // Verifica se e' possivel remover
+    if(lista->size == 0) {
+        printf("Erro ao remover! Lista vazia!");
+        exit(1);
+    } else {
+        return lista->characterList[--lista->size];
+    }
+}// removerFim()
+
+// Remove o elemento na posicao indicada
+struct Character removerPos(struct ListaSeq *lista, int pos){
+     // Verifica se eh possivel inserir
+    if (lista->size >= sizeof(*lista)) {
+        printf("Erro ao inserir! Lista cheia!");
+        exit(1);
+    } else if(pos > lista->size || pos < 0) {
+        printf("Erro ao inserir! Posicao invalida!");
+        exit(1);
+    } else {
+        struct Character removido = lista->characterList[pos];
+        lista->size--;
+
+        // Shift para esquerda, a parir de pos, ocupando o espaco do removido
+        for(int i = pos; i < lista->size; i++){
+            lista->characterList[i] = lista->characterList[i + 1];
+        }
+
+        return removido;
+    }
+}// removerPos()
+
+/***********************/
+
+void escolheOpcao(struct ListaSeq *lista, char* input){
+    char inputOriginal[60] = {0};
+    strcpy(inputOriginal, input);
+
+    const char delim[2] = " ";
+    char* token;
+
+    char acao[3] = {0};
+    token = strtok(input, delim);
+    strcpy(acao, token);
+
+
+    char pt2[40] = {0};
+    if (strlen(inputOriginal) == 5 || strlen(inputOriginal) == 39 || strlen(inputOriginal) == 42) {
+        token = strtok(NULL, delim);
+        strcpy(pt2, token);
+    }
+
+    char pt3[40] = {0};
+
+    struct Character c;
+
+    if(strcmp(acao,"II") == 0) {
+        c = getCharacter(pt2, lista);
+        inserirInicio(lista, c);
+
+    } else if (strcmp(acao, "IF") == 0) {
+        c = getCharacter(pt2, lista);
+        inserirFim(lista, c);
+        
+    } else if (strcmp(acao, "I*") == 0) {
+        token = strtok(NULL, delim);
+        strcpy(pt3, token);
+
+        c = getCharacter(pt3, lista);
+        inserirPos(lista, c, atoi(pt2));
+
+    } else if (strcmp(acao, "RI") == 0) {
+        c = removerInicio(lista);
+        printf("(R) %s\n", c.name);
+
+    } else if (strcmp(acao, "RF") == 0) {
+        c = removerFim(lista);
+        printf("(R) %s\n", c.name);
+
+    } else if (strcmp(acao, "R*") == 0) {
+        c = removerPos(lista, atoi(pt2));
+        printf("(R) %s\n", c.name);
+
+    } else
+        printf("Erro ao manipular a lista!\n");
+}
 
 // printa todos os personagens da lista
-void printLista(struct ListaSeq lista){
-    for(int i = 0; i < lista.size; i++){
-        printCharacter(lista.characterList[i]);
+void printLista(struct ListaSeq *lista){
+    for(int i = 0; i < lista->size; i++){
+        printf("[%i ## ", i);
+        printCharacter(lista->characterList[i]);
+        printf("]\n");
     }
 }// printaLista()
 
 int main(){
     struct ListaSeq lista;
-    newListaSeq(&lista, 1); // 0 = pc / 1 = VERDE
+    newLista(&lista, 2); // 0 = linux / 1 = Windows / 2 = VERDE
 
     char id[50] = {0};
     scanf("%s", id);
@@ -306,7 +444,21 @@ int main(){
         scanf("%s", id);
     }
 
-    printLista(lista);
+    int count;
+    scanf("%i", &count);
+
+    char input[60];
+    scanf(" %[^\n\r]", input);
+
+    while(count > 0){
+        escolheOpcao(&lista, input);
+
+        count--;
+
+        scanf(" %[^\n\r]", input);
+    }
+
+    printLista(&lista);
 
     return 0;
 }// main()
