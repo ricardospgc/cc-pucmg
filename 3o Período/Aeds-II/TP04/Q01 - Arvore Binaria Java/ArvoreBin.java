@@ -466,7 +466,7 @@ public class ArvoreBin {
         if(raiz == null) throw new Exception("Erro ao pesquisar! Arvore vazia!");
         Instant start = Instant.now();
 
-        MyIO.print("raiz ");
+        MyIO.print(key + " => raiz ");
         pesquisar(key, raiz);
 
         Instant end = Instant.now();
@@ -490,12 +490,12 @@ public class ArvoreBin {
             numComparacoes++;
 
         } else if (key.compareTo(i.elemento.getName()) < 0) { // Se a key for menor que o atual
-            MyIO.print("ESQ ");
+            MyIO.print("esq ");
             numComparacoes++;
             pesquisar(key, i.esq); 
 
         } else {  // Se a key for maior que a atual
-            MyIO.print("DIR ");
+            MyIO.print("dir ");
             numComparacoes++;
             pesquisar(key, i.dir);
         }
@@ -559,7 +559,7 @@ public class ArvoreBin {
     
     static public void main(String[] args){
         Scanner scn = new Scanner(System.in);
-        ArvoreBin arvore = new ArvoreBin(0); // 0 = linux / 1 = Windows / void = VERDE
+        ArvoreBin arvore = new ArvoreBin(); // 0 = linux / 1 = Windows / void = VERDE
         
         try{
             // Leitura e armazenamento de personagens
