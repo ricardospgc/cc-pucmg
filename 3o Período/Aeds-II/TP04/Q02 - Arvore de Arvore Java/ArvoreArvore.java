@@ -558,11 +558,11 @@ public class ArvoreArvore {
 
             if(!resp){
                 MyIO.print(" ESQ");
-                pesquisar(key, i.esq);
+                resp = pesquisar(key, i.esq);
             }
             if(!resp){
                 MyIO.print(" DIR");
-                pesquisar(key, i.dir);
+                resp = pesquisar(key, i.dir);
             }
         }
         return resp;
@@ -680,7 +680,7 @@ public class ArvoreArvore {
     
     static public void main(String[] args){
         Scanner scn = new Scanner(System.in);
-        ArvoreArvore arvore = new ArvoreArvore(0); // 0 = linux / 1 = Windows / void = VERDE
+        ArvoreArvore arvore = new ArvoreArvore(); // 0 = linux / 1 = Windows / void = VERDE
         
         try{
             // Leitura e armazenamento de personagens
