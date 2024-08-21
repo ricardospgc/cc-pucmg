@@ -65,12 +65,16 @@ public class Arquivo {
         arquivo.seek(TAM_CABECALHO);
         while(arquivo.getFilePointer() < arquivo.length()) {
             c = new Cliente();
-            aux = new byte[11];
-
+            
             c.id = arquivo.readInt();
             c.nome = arquivo.readUTF();
+            
+            // Como CPF tem tamanho fixo, nao foram usados bytes de tamanho.
+            // Por isso, foi usado um vetor de bytes de tamanho fixo ao inves de readUTF (que exige byte de tamanho)
+            aux = new byte[11];
             arquivo.read(aux);
             c.cpf = new String(aux);
+
             c.salario = arquivo.readFloat();
             c.nascimento = LocalDate.ofEpochDay(arquivo.readInt());
             if(c.cpf.compareTo(cpf) == 0)
