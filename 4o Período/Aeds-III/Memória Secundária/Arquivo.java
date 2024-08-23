@@ -1,24 +1,32 @@
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.time.LocalDate;
+import java.lang.reflect.Constructor;
 
-import entidades.Cliente;
-import entidades.Livro;
+import registros.*;
 
-// Eventualmente uma classe generica, por enquanto somente Clientes
+/* ORGANIZACAO DO ARQUIVO:
+ * Cabecalho: INT indicando o maior ID registrado, funciona como contador de registros
+ * 
+ * ESTRUTURA DO REGISTRO:
+ *  - 1o byte: lapide - * = delete / ' ' = existente
+ *  - short: Indicador de tamanho do registro (varia de acordo com o tipo de registro)
+ *  - sequencia de bytes com os dados do registro 
+ */
 
-public class Arquivo {
+public class Arquivo<T extends Registro> {
     final int TAM_CABECALHO = 4;
     RandomAccessFile arquivo;
     String nomeArquivo;
+    Constructor<T> construtor;
 
-    public Arquivo(String na) throws IOException {
-        File d = new File("dados");
+    public Arquivo(String na, Constructor<T> c) throws IOException {
+        File d = new File("./dados");
         if(!d.exists())
             d.mkdir();
 
-        this.nomeArquivo = "dados/"+na;
+        this.nomeArquivo = "./dados/"+na;
+        this.construtor = c;
         arquivo = new RandomAccessFile(this.nomeArquivo, "rw");
         if(arquivo.length() < TAM_CABECALHO) {
             // inicializa o arquivo, criando seu cabecalho
@@ -26,78 +34,120 @@ public class Arquivo {
         }
     }
 
-    public int createCliente(Cliente c) throws IOException {
+    public int create(T obj) throws IOException {
+        // atualiza o numero do maior ID, serve como contador de registros
         arquivo.seek(0);
         int proximoID = arquivo.readInt()+1;
         arquivo.seek(0);
         arquivo.writeInt(proximoID);
-        c.setId(proximoID);
 
         arquivo.seek(arquivo.length());
-        arquivo.writeInt(c.id);
-        arquivo.writeUTF(c.nome);
-        arquivo.write(c.cpf.getBytes());
-        arquivo.writeFloat(c.salario);
-        arquivo.writeInt((int) c.nascimento.toEpochDay());
+        obj.setId(proximoID); // atualiza o ID do objeto
+        byte[] b = obj.toByteArray();
 
-        return c.id;
-    }
+        // escreve o indicador de tamanho do objeto
+        arquivo.writeByte(' ');
+        arquivo.writeShort(b.length);
 
-    public int createLivro(Livro l) throws IOException{
-        arquivo.seek(0);
-        int proximoID = arquivo.readInt()+1;
-        arquivo.seek(0);
-        arquivo.writeInt(proximoID);
-        l.setId(proximoID);
-
-        arquivo.seek(arquivo.length());
-        arquivo.writeInt(l.id);
-        arquivo.writeUTF(l.titulo);
-        arquivo.writeUTF(l.autor);
-        arquivo.writeFloat(l.preco);
-
-        return l.id;
+        arquivo.write(b);
+        
+        return obj.getId();
     }
     
-    public Cliente readCliente(String cpf) throws IOException {
-        Cliente c;
-        byte[] aux;
-        arquivo.seek(TAM_CABECALHO);
-        while(arquivo.getFilePointer() < arquivo.length()) {
-            c = new Cliente();
-            
-            c.id = arquivo.readInt();
-            c.nome = arquivo.readUTF();
-            
-            // Como CPF tem tamanho fixo, nao foram usados bytes de tamanho.
-            // Por isso, foi usado um vetor de bytes de tamanho fixo ao inves de readUTF (que exige byte de tamanho)
-            aux = new byte[11];
-            arquivo.read(aux);
-            c.cpf = new String(aux);
+    public T read(int id) throws Exception {
+        T obj;
+        short tam;
+        byte[] b;
+        byte lapide;
 
-            c.salario = arquivo.readFloat();
-            c.nascimento = LocalDate.ofEpochDay(arquivo.readInt());
-            if(c.cpf.compareTo(cpf) == 0)
-                return c;
+        arquivo.seek(TAM_CABECALHO); // pula o cabecalho para pesquisar
+        while(arquivo.getFilePointer() < arquivo.length()) { // "enquanto nao for o fim do arquivo"
+            obj = construtor.newInstance();
+            lapide = arquivo.readByte();
+            tam = arquivo.readShort();
+            b = new byte[tam];
+            arquivo.read(b); // read nativo
+
+            if(lapide == ' ') { // caso seja *, foi deletado
+                obj.fromByteArray(b); // constroi o objeto usando o byte array
+                if(obj.getId() == id)
+                    return obj;
+            }
         }
         return null;
     }
 
-    public Livro readLivro(String titulo) throws IOException {
-        Livro l;
-        arquivo.seek(TAM_CABECALHO);
-        while(arquivo.getFilePointer() < arquivo.length()) {
-            l = new Livro();
+    public boolean delete(int id) throws Exception {
+        T obj;
+        short tam;
+        byte[] b;
+        byte lapide;
+        Long endereco;
 
-            l.id = arquivo.readInt();
-            l.titulo = arquivo.readUTF();
-            l.autor = arquivo.readUTF();
-            l.preco = arquivo.readFloat();
+        arquivo.seek(TAM_CABECALHO); // pula o cabecalho para pesquisar
+        while(arquivo.getFilePointer() < arquivo.length()) { // "enquanto nao for o fim do arquivo"
+            obj = construtor.newInstance();
+            endereco = arquivo.getFilePointer();
+            lapide = arquivo.readByte();
+            tam = arquivo.readShort();
+            b = new byte[tam];
+            arquivo.read(b); // read nativo
 
-            if(l.titulo.compareTo(titulo) == 0)
-                return l;
+            if(lapide == ' ') {
+                obj.fromByteArray(b);
+                if(obj.getId() == id) {
+                    arquivo.seek(endereco);
+                    arquivo.write('*'); // atualiza a lapide para *, indicando o delete logico
+                    return true;
+                }
+            }
         }
-        return null;
+        return false;
+    }
+
+    public boolean update(T novoObj) throws Exception {
+        T obj;
+        short tam;
+        byte[] b;
+        byte lapide;
+        Long endereco;
+
+        arquivo.seek(TAM_CABECALHO);
+        while(arquivo.getFilePointer()<arquivo.length()) {
+            obj = construtor.newInstance();
+            endereco = arquivo.getFilePointer();
+            lapide = arquivo.readByte();
+            tam = arquivo.readShort();
+            b = new byte[tam];
+            arquivo.read(b);
+
+            if(lapide == ' ') {
+                obj.fromByteArray(b);
+                if(obj.getId() == novoObj.getId()) { // registro alvo encontrado
+
+                    byte[] b2 = novoObj.toByteArray();
+                    short tam2 = (short)b2.length;
+
+                    // sobrescreve o registro
+                    if(tam2 <= tam) {
+                        arquivo.seek(endereco + 3);
+                        arquivo.write(b2);
+                    }
+
+                    // move o novo registro para o fim
+                    else {
+                        arquivo.seek(endereco);
+                        arquivo.write('*');
+                        arquivo.seek(arquivo.length());
+                        arquivo.writeByte(' ');
+                        arquivo.writeShort(tam2);
+                        arquivo.write(b2);
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void close() throws IOException {
