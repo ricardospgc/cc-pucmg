@@ -1,0 +1,24 @@
+1. πfirst_name,last_name(σgender='F'(actors))
+
+2. πname(σyear > 1999(movies))
+
+3.
+A = π name, director_id(movies ⨝ (id = movie_id) movies_directors)
+π name, first_name, last_name(A ⨝ (id = director_id) directors)
+
+4.
+MoviesRoles = π name, role, actor_id, movie_id, rank(movies ⨝ (movies.id = movie_id) roles)
+ActorRoleInMovie = (MoviesRoles ⨝ (actor_id = actors.id) actors)
+π movies.name, actors.first_name, actors.last_name, roles.role (σrank > 6 (ActorRoleInMovie))
+
+5.
+X = γ director_id; count(movie_id)-> soma (movies_directors)
+   π first_name, last_name, soma(X ⨝ id=director_id directors)
+
+6.
+γ genre; count(movie_id)-> n_total_filmes (movies_genres)
+
+7.
+X = πrank, genre(movies_genres ⨝ movie_id = id movies)
+F = γ genre; avg(rank)→avg_rank(X) ⨝ γ genre; min(rank)→min_rank(X) ⨝ γ genre; max(rank)→max_rank(X)
+F
