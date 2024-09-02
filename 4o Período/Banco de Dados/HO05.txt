@@ -1,0 +1,10 @@
+1.(πfirst_name, last_name(actors)) ∩ (πfirst_name,last_name(directors))
+
+2.
+A = (πfirst_name, last_name(actors)) ∪ (πfirst_name,last_name(directors))
+B = (πfirst_name, last_name(actors)) ∩ (πfirst_name,last_name(directors))
+A - B
+
+3. (πfirst_name, last_name(actors)) ∪ (πfirst_name,last_name(directors))
+
+4.
