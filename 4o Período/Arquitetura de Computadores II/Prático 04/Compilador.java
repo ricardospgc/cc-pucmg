@@ -87,7 +87,7 @@ public static void main(String[] args){
         writer.close();
 
     } catch (Exception ex) {
-        System.err.println("Erro");
+        System.err.println("Erro" + ex);
     }
         
 }// main()
